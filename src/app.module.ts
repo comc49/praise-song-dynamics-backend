@@ -6,6 +6,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 import { join } from 'path';
+import { UserModule } from './user/user.module';
+import { SongModule } from './song/song.module';
+import { UserModule } from './user/user.module';
 
 let envFilePath = '.env.dev';
 let synchronizeBool = true;
@@ -34,6 +37,8 @@ if (process.env.ENVIRONMENT === 'production') {
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
+    UserModule,
+    SongModule,
   ],
   controllers: [AppController],
   providers: [AppService],
