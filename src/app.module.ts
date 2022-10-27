@@ -6,9 +6,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 import { join } from 'path';
-import { UserModule } from './user/user.module';
 import { SongModule } from './song/song.module';
 import { UserModule } from './user/user.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { configValidationSchema } from './config.schema';
 
 let envFilePath = '.env.dev';
 let synchronizeBool = true;
@@ -21,15 +22,26 @@ if (process.env.ENVIRONMENT === 'production') {
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 8080,
-      username: 'root',
-      password: 'root',
-      database: 'test',
-      entities: ['dist/**/*.entity{.ts,.js}'],
-      synchronize: synchronizeBool, // don't use true for prod
+    ConfigModule.forRoot({
+      envFilePath: [envFilePath],
+      validationSchema: configValidationSchema,
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => {
+        return {
+          type: 'postgres',
+          host: configService.get('DB_HOST'),
+          port: configService.get('DB_PORT'),
+          username: configService.get('DB_USERNAME'),
+          password: configService.get('DB_PASSWORD'),
+          database: configService.get('DB_DATABASE'),
+          autoLoadEntities: true,
+          entities: ['dist/**/*.entity{.ts,.js}'],
+          synchronize: synchronizeBool, // don't use true for prod
+        }
+      }
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
