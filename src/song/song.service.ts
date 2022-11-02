@@ -1,11 +1,17 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateSongInput } from './dto/create-song.input';
 import { UpdateSongInput } from './dto/update-song.input';
+import { Song } from './entities/song.entity';
 
 @Injectable()
 export class SongService {
+  constructor(@InjectRepository(Song) private songRepository: Repository<Song>) {
+  }
   create(createSongInput: CreateSongInput) {
-    return 'This action adds a new song';
+    const newChecklist = this.songRepository.create(createSongInput);
+    return this.songRepository.save(newChecklist);
   }
 
   findAll() {

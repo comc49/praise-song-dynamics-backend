@@ -13,7 +13,7 @@ export class SongResolver {
     return this.songService.create(createSongInput);
   }
 
-  @Query(() => [Song], { name: 'song' })
+  @Query(() => [Song], { name: 'songs' })
   findAll() {
     return this.songService.findAll();
   }

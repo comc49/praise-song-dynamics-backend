@@ -10,6 +10,7 @@ import { SongModule } from './song/song.module';
 import { UserModule } from './user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
+import { AuthModule } from './auth/auth.module';
 
 let envFilePath = '.env.dev';
 let synchronizeBool = true;
@@ -51,6 +52,7 @@ if (process.env.ENVIRONMENT === 'production') {
     }),
     UserModule,
     SongModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
