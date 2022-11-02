@@ -9,27 +9,27 @@ export class SongResolver {
   constructor(private readonly songService: SongService) {}
 
   @Mutation(() => Song)
-  createSong(@Args('createSongInput') createSongInput: CreateSongInput) {
+  async createSong(@Args('createSongInput') createSongInput: CreateSongInput) {
     return this.songService.create(createSongInput);
   }
 
   @Query(() => [Song], { name: 'songs' })
-  findAll() {
+  async findAll() {
     return this.songService.findAll();
   }
 
   @Query(() => Song, { name: 'song' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  async findOne(@Args('id', { type: () => Int }) id: number) {
     return this.songService.findOne(id);
   }
 
   @Mutation(() => Song)
-  updateSong(@Args('updateSongInput') updateSongInput: UpdateSongInput) {
+  async updateSong(@Args('updateSongInput') updateSongInput: UpdateSongInput) {
     return this.songService.update(updateSongInput.id, updateSongInput);
   }
 
   @Mutation(() => Song)
-  removeSong(@Args('id', { type: () => Int }) id: number) {
+  async removeSong(@Args('id', { type: () => Int }) id: number) {
     return this.songService.remove(id);
   }
 }

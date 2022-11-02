@@ -11,6 +11,7 @@ import { UserModule } from './user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
 import { AuthModule } from './auth/auth.module';
+import { DateScalar } from './common/scalars/date.scalar';
 
 let envFilePath = '.env.dev';
 let synchronizeBool = true;
@@ -55,6 +56,6 @@ if (process.env.ENVIRONMENT === 'production') {
     AuthModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, DateScalar],
 })
 export class AppModule {}

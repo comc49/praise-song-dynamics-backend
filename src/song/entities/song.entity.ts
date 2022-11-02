@@ -1,5 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -23,6 +23,9 @@ export class Song {
   @Column("text", { array: true })
   @Field(() => [String])
   sections: string[];
+
+  @CreateDateColumn()
+  createdAt?: Date;
 
 
 }

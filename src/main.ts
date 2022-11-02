@@ -5,6 +5,7 @@ import { DataSource, getRepository } from 'typeorm';
 import { TypeORMSession } from './typeorm/entities/session.entity';
 import * as session from 'express-session';
 import { TypeormStore } from 'connect-typeorm/out';
+import { ValidationPipe } from '@nestjs/common';
 
 
 const PORT = process.env.PORT || 3001;
@@ -32,6 +33,7 @@ async function bootstrap() {
   );
   app.use(passport.initialize());
   app.use(passport.session());
+  app.useGlobalPipes(new ValidationPipe());
 
   await app.listen(PORT);
 }
