@@ -12,6 +12,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
 import { AuthModule } from './auth/auth.module';
 import { DateScalar } from './common/scalars/date.scalar';
+import { PubSubModule } from './pub-sub/pub-sub.module';
 
 let envFilePath = '.env.dev';
 let synchronizeBool = true;
@@ -50,10 +51,12 @@ if (process.env.ENVIRONMENT === 'production') {
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      installSubscriptionHandlers: true
     }),
     UserModule,
     SongModule,
-    AuthModule
+    AuthModule,
+    PubSubModule
   ],
   controllers: [AppController],
   providers: [AppService, DateScalar],

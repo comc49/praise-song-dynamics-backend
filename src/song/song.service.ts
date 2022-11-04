@@ -5,14 +5,22 @@ import { CreateSongInput } from './dto/create-song.input';
 import { UpdateSongInput } from './dto/update-song.input';
 import { UserInputError } from 'apollo-server-express';
 import { Song } from './entities/song.entity';
+import { PubSubModule } from 'src/pub-sub/pub-sub.module';
+import { PubSub } from 'graphql-subscriptions';
+
 
 @Injectable()
 export class SongService {
-  constructor(@InjectRepository(Song) private songRepository: Repository<Song>) {
+  constructor(
+    @InjectRepository(Song) private songRepository: Repository<Song>,
+    private readonly pubSub: PubSub, 
+    ) {
   }
   async create(createSongInput: CreateSongInput) {
-    const newChecklist = await this.songRepository.create(createSongInput);
-    return this.songRepository.save(newChecklist);
+    const newSong = await this.songRepository.create(createSongInput);
+    const newSongEntity = this.songRepository.save(newSong);
+    this.pubSub.publish('songAdded', { songAdded: newSong}); // 👈 PubSub
+    return newSongEntity;
   }
 
   async findAll() {
